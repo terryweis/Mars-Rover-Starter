@@ -11,35 +11,30 @@ class Rover {
          };
 
  //cycle through the commands and if statements
- //STATUS
-         for (let i = 0; i < message.commands.length; i++){
-            if (message.commands[i].commandType === 'STATUS_CHECK'){
-               received.results.push({
-                  completed: true,
-                  roverStatus: {mode:this.mode, generatorWatts: 110, position: this.position}
-               });
-            };  
-         };
-//MODE
-         for (let i= 0; i < message.commands.length; i++){
-            if (message.commands[i].commandType === 'MODE_CHANGE'){
-               received.results[0].roverStatus.mode = message.commands[i].value 
-               received.results.unshift({completed: true})
-            };
-          };
-//MOVE
-          for (let i =0; i < message.commands.length; i++ ){
-            if (message.commands[i].commandType === 'MOVE'){
-               if (received.results[0].roverStatus.mode === 'LOW_POWER'){
-                  received.results.unshift({completed: false})
-               }else{
-                  received.results[0].roverStatus.position = message.commands[i].value
-                  received.results.unshift({completed: true})
-               }
-            }
-          }  
-          return received 
-         };
+ 
+ for (let i = 0; i < message.commands.length; i++){
+   if (message.commands[i].commandType === 'STATUS_CHECK'){
+      received.results.push({
+         completed: true,
+         roverStatus: {mode:this.mode, generatorWatts: this.generatorWatts, position: this.position}
+      });
+   };  
+   if (message.commands[i].commandType === 'MODE_CHANGE'){
+          this.mode = message.commands[i].value 
+          received.results.push({completed: true})
+       };
+   if (message.commands[i].commandType === 'MOVE'){
+           if (this.mode === 'LOW_POWER'){
+              received.results.push({completed: false})
+           }else{
+              this.position = message.commands[i].value
+              received.results.push({completed: true})
+           }
+        }
+};
+return received;      
+};
+
       };     
 
 

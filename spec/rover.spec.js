@@ -58,9 +58,9 @@ it("responds with a false completed value when attempting to move in LOW_POWER m
 });
 
 it("responds with the position for the move command", function(){
-  let commands = [ new Command('MOVE', 98500 ), new Command ('STATUS_CHECK')];
+  let commands = [ new Command('MOVE', 98500), new Command ('STATUS_CHECK')];
   let message = new Message('Test message with two commands', commands);
-  let rover = new Rover(98382,);
+  let rover = new Rover(98382);
   let received = rover.receiveMessage(message);
   expect(received.results[0].completed).toBe(true);
   expect(received.results[1].roverStatus.position).toEqual(98500)
